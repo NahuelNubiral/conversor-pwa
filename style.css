@@ -51,12 +51,14 @@ input {
   --bg-color: #ffffff;
   --text-color: #000000;
   --accent-color: #2196f3;
+  --sidebar-bg: #f4f4f4; /* Color de fondo predeterminado para el sidebar */
 }
 
 body.dark {
   --bg-color: #121212;
   --text-color: #ffffff;
   --accent-color: #90caf9;
+  --sidebar-bg: #1e1e1e;
 }
 
 /* Dark mode toggle button */
@@ -89,19 +91,21 @@ body.dark {
 .sidebar {
   position: fixed;
   top: 0;
-  left: -250px;
-  width: 250px;
+  left: 0;
+  width: 280px;
   height: 100%;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  padding: 20px;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.2);
-  transition: left 0.3s ease;
+  background-color: var(--sidebar-bg);
+  box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+  padding: 1rem;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
   z-index: 1000;
 }
+
 .sidebar.open {
-  left: 0;
+  transform: translateX(0);
 }
+
 #open-sidebar {
   position: fixed;
   top: 10px;
