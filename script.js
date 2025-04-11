@@ -1,67 +1,66 @@
+// Obtener referencias a los elementos del DOM
 const dolarBlueInput = document.getElementById("dolarBlue");
 const precioCLPInput = document.getElementById("precioCLP");
 const dolarPorPesoChilenoInput = document.getElementById("dolarPorPesoChileno");
 const resultadoSpan = document.getElementById("resultado");
+const toggleThemeBtn = document.getElementById("toggle-theme");
 
-// Cargar valores si es posible
-function cargarValores() {
-  try {
+// Verificar que los elementos existen
+if (!dolarBlueInput || !precioCLPInput || !dolarPorPesoChilenoInput || !resultadoSpan || !toggleThemeBtn) {
+  console.error("Algunos elementos del DOM no se encontraron.");
+} else {
+  // Cargar valores desde localStorage
+  function cargarValores() {
     [dolarBlueInput, precioCLPInput, dolarPorPesoChilenoInput].forEach((input) => {
       const saved = localStorage.getItem(input.id);
       if (saved !== null) input.value = saved;
     });
-  } catch (e) {
-    console.warn("No se pudo acceder a localStorage");
   }
-}
 
-function calcular() {
-  const dolarBlue = parseFloat(dolarBlueInput.value) || 0;
-  const precioCLP = parseFloat(precioCLPInput.value) || 0;
-  const dolarPorPesoChileno = parseFloat(dolarPorPesoChilenoInput.value) || 0;
+  // Calcular el resultado
+  function calcular() {
+    const dolarBlue = parseFloat(dolarBlueInput.value) || 0;
+    const precioCLP = parseFloat(precioCLPInput.value) || 0;
+    const dolarPorPesoChileno = parseFloat(dolarPorPesoChilenoInput.value) || 0;
 
-  const dolares = precioCLP * dolarPorPesoChileno;
-  const pesosArg = dolares * dolarBlue;
+    const dolares = precioCLP * dolarPorPesoChileno;
+    const pesosArg = dolares * dolarBlue;
 
-  resultadoSpan.textContent = pesosArg.toFixed(2);
-}
+    resultadoSpan.textContent = pesosArg.toFixed(2);
+  }
 
-function guardarValores() {
-  try {
+  // Guardar valores en localStorage
+  function guardarValores() {
     [dolarBlueInput, precioCLPInput, dolarPorPesoChilenoInput].forEach((input) => {
       localStorage.setItem(input.id, input.value);
     });
-  } catch (e) {
-    console.warn("No se pudo guardar en localStorage");
   }
-}
 
-// Eventos
-[dolarBlueInput, precioCLPInput, dolarPorPesoChilenoInput].forEach((input) => {
-  input.addEventListener("input", () => {
-    calcular();
-    guardarValores();
+  // Manejar eventos de entrada
+  [dolarBlueInput, precioCLPInput, dolarPorPesoChilenoInput].forEach((input) => {
+    input.addEventListener("input", () => {
+      calcular();
+      guardarValores();
+    });
   });
-});
 
-// Inicializar
-cargarValores();
-calcular();
+  // Inicializar valores y cálculo
+  cargarValores();
+  calcular();
 
-// Tema oscuro/claro
-const toggleThemeBtn = document.getElementById("toggle-theme");
+  // Cambiar tema oscuro/claro
+  function setTheme(mode) {
+    document.body.classList.toggle("dark", mode === "dark");
+    localStorage.setItem("theme", mode);
+    toggleThemeBtn.textContent = mode === "dark" ? "☀️" : "🌙";
+  }
 
-function setTheme(mode) {
-  document.body.classList.toggle("dark", mode === "dark");
-  localStorage.setItem("theme", mode);
-  toggleThemeBtn.textContent = mode === "dark" ? "☀️" : "🌙";
+  toggleThemeBtn.addEventListener("click", () => {
+    const newTheme = document.body.classList.contains("dark") ? "light" : "dark";
+    setTheme(newTheme);
+  });
+
+  // Cargar preferencia de tema al inicio
+  const savedTheme = localStorage.getItem("theme") || "light";
+  setTheme(savedTheme);
 }
-
-toggleThemeBtn.addEventListener("click", () => {
-  const newTheme = document.body.classList.contains("dark") ? "light" : "dark";
-  setTheme(newTheme);
-});
-
-// Cargar preferencia al inicio
-const savedTheme = localStorage.getItem("theme") || "light";
-setTheme(savedTheme);

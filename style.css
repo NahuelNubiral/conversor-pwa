@@ -1,8 +1,9 @@
 body {
   font-family: sans-serif;
   margin: 0;
-  background: #f9f9f9;
-  color: #333;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background 0.3s, color 0.3s;
 }
 
 .container {
@@ -40,7 +41,7 @@ input {
   margin-top: 25px;
   font-size: 1.2em;
   padding: 15px;
-  background: #ffffff;
+  background-color: var(--bg-color);
   border: 1px solid #ccc;
   border-radius: 6px;
   text-align: center;
@@ -58,13 +59,7 @@ body.dark {
   --accent-color: #90caf9;
 }
 
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  transition: background 0.3s, color 0.3s;
-}
-
-/* Botón modo oscuro */
+/* Dark mode toggle button */
 #toggle-theme {
   position: fixed;
   top: 10px;
