@@ -123,3 +123,33 @@ setTheme(savedTheme);
 cargarValores();
 calcular();
 renderizarProductos();
+
+const sidebar = document.getElementById("sidebar");
+const openSidebarBtn = document.getElementById("open-sidebar");
+const closeSidebarBtn = document.getElementById("close-sidebar");
+
+openSidebarBtn.addEventListener("click", () => sidebar.classList.add("open"));
+closeSidebarBtn.addEventListener("click", () => sidebar.classList.remove("open"));
+
+const overlay = document.getElementById("overlay");
+
+function openSidebar() {
+  sidebar.classList.add("open");
+  overlay.style.display = "block";
+}
+
+function closeSidebar() {
+  sidebar.classList.remove("open");
+  overlay.style.display = "none";
+}
+
+openSidebarBtn.addEventListener("click", openSidebar);
+closeSidebarBtn.addEventListener("click", closeSidebar);
+
+// Cerrar tocando fuera del sidebar
+overlay.addEventListener("click", closeSidebar);
+
+// Asegurarse de ocultar overlay al cargar
+window.addEventListener("load", () => {
+  overlay.style.display = "none";
+});
