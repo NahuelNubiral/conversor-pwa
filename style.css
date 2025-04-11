@@ -152,26 +152,3 @@ h2 {
   border-bottom: 1px solid #ccc;
   padding-bottom: 0.4rem;
 }
-
-#barra-impuestos {
-  margin-top: 20px;
-  width: 100%;
-  background-color: #e0e0e0;
-  border-radius: 10px;
-  overflow: hidden;
-  height: 20px;
-  position: relative;
-}
-
-#barra-progreso {
-  height: 100%;
-  width: 0;
-  background-color: green; /* Color inicial */
-  transition: width 0.3s ease, background-color 0.3s ease;
-}
-
-#info-excedente {
-  margin-top: 10px;
-  font-size: 0.9em;
-  text-align: center;
-}
