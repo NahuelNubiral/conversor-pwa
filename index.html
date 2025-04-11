@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conversor de Divisas</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+  <meta name="theme-color" content="#2196f3" />
+</head>
+<body>
+  <div class="container">
+    <h1>💱 Conversor</h1>
+
+    <div class="form-group">
+      <label for="dolarBlue">Dólar Blue (ARS)</label>
+      <input type="number" id="dolarBlue" placeholder="Ej: 1355" />
+    </div>
+
+    <div class="form-group">
+      <label for="dolarPorPesoChileno">1 CLP equivale a USD</label>
+      <input type="number" id="dolarPorPesoChileno" step="0.0001" placeholder="Ej: 0.0010" />
+    </div>
+
+    <div class="form-group">
+      <label for="precioCLP">Precio en CLP</label>
+      <input type="number" id="precioCLP" placeholder="Ej: 10000" />
+    </div>
+
+    <div class="resultado">
+      <strong>Total en ARS:</strong> <span id="resultado">0.00</span>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js")
+        .then(() => console.log("Service Worker registrado"))
+        .catch(error => console.log("Error al registrar Service Worker:", error));
+    }
+  </script>
+</body>
+</html>
