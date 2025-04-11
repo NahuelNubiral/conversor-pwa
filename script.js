@@ -11,6 +11,38 @@ const listaProductos = document.getElementById("listaProductos");
 let productos = JSON.parse(localStorage.getItem("productos")) || [];
 let indexEditando = null;
 
+function formatCurrency(value) {
+  return value.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function actualizarBarraImpuestos() {
+  const tasaUSD = parseFloat(dolarPorPesoChilenoInput.value) || 0;
+  const tasaARS = parseFloat(dolarBlueInput.value) || 0;
+
+  // Calcular el total en USD
+  const totalUSD = productos.reduce((sum, producto) => sum + producto.clp * tasaUSD, 0);
+
+  // Actualizar la barra de progreso
+  const barraProgreso = document.getElementById("barra-progreso");
+  const porcentaje = Math.min((totalUSD / 300) * 100, 100); // Máximo 100%
+  barraProgreso.style.width = `${porcentaje}%`;
+
+  // Calcular excedente e impuestos
+  const infoExcedente = document.getElementById("info-excedente");
+  if (totalUSD > 300) {
+    const excedenteUSD = totalUSD - 300;
+    const impuestosUSD = excedenteUSD / 2;
+    const impuestosARS = impuestosUSD * tasaARS;
+
+    infoExcedente.textContent = `
+      Excedente: ${formatCurrency(excedenteUSD)} USD |
+      Impuestos: ${formatCurrency(impuestosUSD)} USD (${formatCurrency(impuestosARS)} ARS)
+    `;
+  } else {
+    infoExcedente.textContent = "Dentro del límite de 300 USD.";
+  }
+}
+
 function renderizarProductos() {
   listaProductos.innerHTML = "";
 
@@ -24,14 +56,16 @@ function renderizarProductos() {
     const li = document.createElement("li");
     li.innerHTML = `
       <strong>${producto.nombre}</strong><br/>
-      CLP: ${producto.clp.toFixed(0)} |
-      USD: ${dolares.toFixed(2)} |
-      ARS: ${ars.toFixed(2)}<br/>
+      CLP: ${formatCurrency(producto.clp)} |
+      USD: ${formatCurrency(dolares)} |
+      ARS: ${formatCurrency(ars)}<br/>
       <button onclick="editarProducto(${index})">✏️ Editar</button>
       <button onclick="eliminarProducto(${index})">🗑️ Eliminar</button>
     `;
     listaProductos.appendChild(li);
   });
+
+  actualizarBarraImpuestos(); // Actualizar la barra de impuestos
 }
 
 window.editarProducto = function (index) {
@@ -73,7 +107,10 @@ productoForm.addEventListener("submit", (e) => {
 });
 
 [dolarBlueInput, dolarPorPesoChilenoInput].forEach(input => {
-  input.addEventListener("input", renderizarProductos);
+  input.addEventListener("input", () => {
+    renderizarProductos();
+    actualizarBarraImpuestos();
+  });
 });
 
 function cargarValores() {
@@ -91,7 +128,7 @@ function calcular() {
   const dolares = precioCLP * dolarPorPesoChileno;
   const pesosArg = dolares * dolarBlue;
 
-  resultadoSpan.textContent = pesosArg.toFixed(2);
+  resultadoSpan.textContent = formatCurrency(pesosArg);
 }
 
 function guardarValores() {
