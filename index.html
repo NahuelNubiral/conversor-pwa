@@ -1,3 +1,4 @@
+<!-- index.html actualizado -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,10 +11,8 @@
   <meta name="theme-color" content="#2196f3" />
 </head>
 <body>
-  <!-- Botón para abrir el panel -->
   <button id="open-sidebar" title="Abrir ajustes" aria-label="Abrir ajustes">⚙️</button>
 
-  <!-- Sidebar oculto -->
   <div id="sidebar" class="sidebar">
     <button id="close-sidebar">✖️</button>
     <h2>Ajustes</h2>
@@ -40,11 +39,9 @@
       <strong>Total en 🇦🇷:</strong> <span id="resultado">0.00</span>
     </div>
 
-    <!-- Título de lista de productos (MOVIDO) -->
     <h2 style="margin-top: 2rem;">🛒 Lista de productos</h2>
-    <ul id="listaProductos"></ul>
+    <ul id="listaProductos" class="lista-productos"></ul>
 
-    <!-- Formulario de productos -->
     <form id="productoForm">
       <div class="form-group">
         <label for="nombreProducto">Nombre del Producto</label>
@@ -57,16 +54,12 @@
       <button type="submit">Agregar Producto</button>
     </form>
 
-    <!-- Panel de impuestos -->
     <div id="barra-impuestos">
-      <!-- Etiquetas de inicio y fin de la barra -->
       <div style="display: flex; justify-content: space-between; font-size: 0.9em; margin-bottom: 5px;">
         <span>0 USD</span>
         <span>300 USD</span>
       </div>
-      <!-- Barra de progreso -->
       <div id="barra-progreso"></div>
-      <!-- Información del excedente e impuestos -->
       <p id="info-excedente"></p>
     </div>
   </div>

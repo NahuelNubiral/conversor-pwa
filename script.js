@@ -12,19 +12,20 @@ let productos = JSON.parse(localStorage.getItem("productos")) || [];
 let indexEditando = null;
 
 function formatCurrency(value) {
-  return value.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return value.toLocaleString("es-AR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 }
 
 function actualizarBarraImpuestos() {
-  const tasaUSD = parseFloat(dolarPorPesoChilenoInput.value) || 0; // Tasa de conversión CLP a USD
-  const totalUSD = productos.reduce((sum, producto) => sum + producto.clp * tasaUSD, 0); // Total en USD
+  const tasaUSD = parseFloat(dolarPorPesoChilenoInput.value) || 0;
+  const totalUSD = productos.reduce((sum, producto) => sum + producto.clp * tasaUSD, 0);
 
-  // Actualizar la barra de progreso
   const barraProgreso = document.getElementById("barra-progreso");
-  const porcentaje = Math.min((totalUSD / 300) * 100, 100); // Porcentaje de llenado (máximo 100%)
+  const porcentaje = Math.min((totalUSD / 300) * 100, 100);
   barraProgreso.style.width = `${porcentaje}%`;
 
-  // Cambiar el color dinámicamente según el porcentaje
   if (porcentaje < 50) {
     barraProgreso.style.backgroundColor = "green";
   } else if (porcentaje < 80) {
@@ -33,12 +34,11 @@ function actualizarBarraImpuestos() {
     barraProgreso.style.backgroundColor = "red";
   }
 
-  // Mostrar el excedente e impuestos si el total supera los 300 USD
   const infoExcedente = document.getElementById("info-excedente");
   if (totalUSD > 300) {
     const excedenteUSD = totalUSD - 300;
     const impuestosUSD = excedenteUSD / 2;
-    const tasaARS = parseFloat(dolarBlueInput.value) || 0; // Tasa de conversión USD a ARS
+    const tasaARS = parseFloat(dolarBlueInput.value) || 0;
     const impuestosARS = impuestosUSD * tasaARS;
 
     infoExcedente.innerHTML = `
@@ -53,19 +53,26 @@ function actualizarBarraImpuestos() {
 function renderizarProductos() {
   listaProductos.innerHTML = "";
 
+  const tasaUSD = parseFloat(dolarPorPesoChilenoInput.value) || 0;
+  const tasaARS = parseFloat(dolarBlueInput.value) || 0;
+
   productos.forEach((producto, index) => {
+    const valorUSD = producto.clp * tasaUSD;
+    const valorARS = valorUSD * tasaARS;
+
     const li = document.createElement("li");
     li.innerHTML = `
       <strong>${producto.nombre}</strong><br/>
       CLP: ${formatCurrency(producto.clp)} |
-      USD: ${formatCurrency(producto.clp * parseFloat(dolarPorPesoChilenoInput.value) || 0)}<br/>
+      USD: ${formatCurrency(valorUSD)} |
+      ARS: ${formatCurrency(valorARS)}<br/>
       <button onclick="editarProducto(${index})">✏️ Editar</button>
       <button onclick="eliminarProducto(${index})">🗑️ Eliminar</button>
     `;
     listaProductos.appendChild(li);
   });
 
-  actualizarBarraImpuestos(); // Actualizar la barra después de renderizar los productos
+  actualizarBarraImpuestos();
 }
 
 window.editarProducto = function (index) {
@@ -103,10 +110,10 @@ productoForm.addEventListener("submit", (e) => {
   nombreProductoInput.value = "";
   precioProductoInput.value = "";
 
-  renderizarProductos(); // Actualizar la lista y la barra
+  renderizarProductos();
 });
 
-[dolarBlueInput, dolarPorPesoChilenoInput].forEach(input => {
+[dolarBlueInput, dolarPorPesoChilenoInput].forEach((input) => {
   input.addEventListener("input", () => {
     renderizarProductos();
     actualizarBarraImpuestos();
@@ -119,8 +126,8 @@ function cargarValores() {
     if (saved !== null) input.value = saved;
   });
 
-  if (!dolarPorPesoChilenoInput.value) dolarPorPesoChilenoInput.value = "0.0010"; // Valor predeterminado
-  if (!dolarBlueInput.value) dolarBlueInput.value = "1355"; // Valor predeterminado
+  if (!dolarPorPesoChilenoInput.value) dolarPorPesoChilenoInput.value = "0.0010";
+  if (!dolarBlueInput.value) dolarBlueInput.value = "1355";
 }
 
 function calcular() {
@@ -163,7 +170,6 @@ setTheme(savedTheme);
 cargarValores();
 calcular();
 renderizarProductos();
-actualizarBarraImpuestos();
 
 const sidebar = document.getElementById("sidebar");
 const openSidebarBtn = document.getElementById("open-sidebar");
