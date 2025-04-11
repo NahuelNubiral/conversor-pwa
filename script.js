@@ -16,36 +16,34 @@ function formatCurrency(value) {
 }
 
 function actualizarBarraImpuestos() {
-  const tasaUSD = parseFloat(dolarPorPesoChilenoInput.value) || 0;
-  const tasaARS = parseFloat(dolarBlueInput.value) || 0;
-
-  // Calcular el total en USD
-  const totalUSD = productos.reduce((sum, producto) => sum + producto.clp * tasaUSD, 0);
+  const tasaUSD = parseFloat(dolarPorPesoChilenoInput.value) || 0; // Tasa de conversión CLP a USD
+  const totalUSD = productos.reduce((sum, producto) => sum + producto.clp * tasaUSD, 0); // Total en USD
 
   // Actualizar la barra de progreso
   const barraProgreso = document.getElementById("barra-progreso");
-  const porcentaje = Math.min((totalUSD / 300) * 100, 100); // Máximo 100%
+  const porcentaje = Math.min((totalUSD / 300) * 100, 100); // Porcentaje de llenado (máximo 100%)
   barraProgreso.style.width = `${porcentaje}%`;
 
   // Cambiar el color dinámicamente según el porcentaje
   if (porcentaje < 50) {
-    barraProgreso.style.backgroundColor = "green"; // Verde para menos del 50%
+    barraProgreso.style.backgroundColor = "green";
   } else if (porcentaje < 80) {
-    barraProgreso.style.backgroundColor = "yellow"; // Amarillo entre 50% y 80%
+    barraProgreso.style.backgroundColor = "yellow";
   } else {
-    barraProgreso.style.backgroundColor = "red"; // Rojo para más del 80%
+    barraProgreso.style.backgroundColor = "red";
   }
 
-  // Calcular excedente e impuestos
+  // Mostrar el excedente e impuestos si el total supera los 300 USD
   const infoExcedente = document.getElementById("info-excedente");
   if (totalUSD > 300) {
     const excedenteUSD = totalUSD - 300;
     const impuestosUSD = excedenteUSD / 2;
+    const tasaARS = parseFloat(dolarBlueInput.value) || 0; // Tasa de conversión USD a ARS
     const impuestosARS = impuestosUSD * tasaARS;
 
-    infoExcedente.textContent = `
-      Excedente: ${formatCurrency(excedenteUSD)} USD |
-      Impuestos: ${formatCurrency(impuestosUSD)} USD (${formatCurrency(impuestosARS)} ARS)
+    infoExcedente.innerHTML = `
+      <strong>Excedente:</strong> ${formatCurrency(excedenteUSD)} USD |
+      <strong>Impuestos:</strong> ${formatCurrency(impuestosUSD)} USD (${formatCurrency(impuestosARS)} ARS)
     `;
   } else {
     infoExcedente.textContent = "Dentro del límite de 300 USD.";
@@ -56,25 +54,18 @@ function renderizarProductos() {
   listaProductos.innerHTML = "";
 
   productos.forEach((producto, index) => {
-    const tasaUSD = parseFloat(dolarPorPesoChilenoInput.value) || 0;
-    const tasaARS = parseFloat(dolarBlueInput.value) || 0;
-
-    const dolares = producto.clp * tasaUSD;
-    const ars = dolares * tasaARS;
-
     const li = document.createElement("li");
     li.innerHTML = `
       <strong>${producto.nombre}</strong><br/>
       CLP: ${formatCurrency(producto.clp)} |
-      USD: ${formatCurrency(dolares)} |
-      ARS: ${formatCurrency(ars)}<br/>
+      USD: ${formatCurrency(producto.clp * parseFloat(dolarPorPesoChilenoInput.value) || 0)}<br/>
       <button onclick="editarProducto(${index})">✏️ Editar</button>
       <button onclick="eliminarProducto(${index})">🗑️ Eliminar</button>
     `;
     listaProductos.appendChild(li);
   });
 
-  actualizarBarraImpuestos(); // Actualizar la barra de impuestos
+  actualizarBarraImpuestos(); // Actualizar la barra después de renderizar los productos
 }
 
 window.editarProducto = function (index) {
@@ -112,7 +103,7 @@ productoForm.addEventListener("submit", (e) => {
   nombreProductoInput.value = "";
   precioProductoInput.value = "";
 
-  renderizarProductos();
+  renderizarProductos(); // Actualizar la lista y la barra
 });
 
 [dolarBlueInput, dolarPorPesoChilenoInput].forEach(input => {
@@ -127,6 +118,9 @@ function cargarValores() {
     const saved = localStorage.getItem(input.id);
     if (saved !== null) input.value = saved;
   });
+
+  if (!dolarPorPesoChilenoInput.value) dolarPorPesoChilenoInput.value = "0.0010"; // Valor predeterminado
+  if (!dolarBlueInput.value) dolarBlueInput.value = "1355"; // Valor predeterminado
 }
 
 function calcular() {
@@ -169,6 +163,7 @@ setTheme(savedTheme);
 cargarValores();
 calcular();
 renderizarProductos();
+actualizarBarraImpuestos();
 
 const sidebar = document.getElementById("sidebar");
 const openSidebarBtn = document.getElementById("open-sidebar");

@@ -166,8 +166,8 @@ h2 {
 #barra-progreso {
   height: 100%;
   width: 0;
-  background: linear-gradient(to right, green, yellow, red);
-  transition: width 0.3s ease;
+  background-color: green; /* Color inicial */
+  transition: width 0.3s ease, background-color 0.3s ease;
 }
 
 #info-excedente {
