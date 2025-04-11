@@ -4,6 +4,54 @@ const precioCLPInput = document.getElementById("precioCLP");
 const dolarPorPesoChilenoInput = document.getElementById("dolarPorPesoChileno");
 const resultadoSpan = document.getElementById("resultado");
 const toggleThemeBtn = document.getElementById("toggle-theme");
+const productoForm = document.getElementById("productoForm");
+const nombreProductoInput = document.getElementById("nombreProducto");
+const precioProductoInput = document.getElementById("precioProducto");
+const listaProductos = document.getElementById("listaProductos");
+
+let productos = JSON.parse(localStorage.getItem("productos")) || [];
+
+function renderizarProductos() {
+  listaProductos.innerHTML = "";
+
+  productos.forEach((producto, index) => {
+    const dolares = producto.clp * (parseFloat(dolarPorPesoChilenoInput.value) || 0);
+    const ars = dolares * (parseFloat(dolarBlueInput.value) || 0);
+
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <strong>${producto.nombre}</strong><br/>
+      CLP: ${producto.clp.toFixed(0)} |
+      USD: ${dolares.toFixed(2)} |
+      ARS: ${ars.toFixed(2)}
+    `;
+    listaProductos.appendChild(li);
+  });
+}
+
+productoForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const nombre = nombreProductoInput.value.trim();
+  const clp = parseFloat(precioProductoInput.value);
+
+  if (!nombre || isNaN(clp)) return;
+
+  productos.push({ nombre, clp });
+  localStorage.setItem("productos", JSON.stringify(productos));
+
+  nombreProductoInput.value = "";
+  precioProductoInput.value = "";
+
+  renderizarProductos();
+});
+
+// Renderizar al inicio y recalcular si cambian las tasas
+renderizarProductos();
+
+[dolarBlueInput, dolarPorPesoChilenoInput].forEach(input => {
+  input.addEventListener("input", renderizarProductos);
+});
 
 // Verificar que los elementos existen
 if (!dolarBlueInput || !precioCLPInput || !dolarPorPesoChilenoInput || !resultadoSpan || !toggleThemeBtn) {
