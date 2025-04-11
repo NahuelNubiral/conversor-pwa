@@ -47,3 +47,21 @@ function guardarValores() {
 // Inicializar
 cargarValores();
 calcular();
+
+// Tema oscuro/claro
+const toggleThemeBtn = document.getElementById("toggle-theme");
+
+function setTheme(mode) {
+  document.body.classList.toggle("dark", mode === "dark");
+  localStorage.setItem("theme", mode);
+  toggleThemeBtn.textContent = mode === "dark" ? "☀️" : "🌙";
+}
+
+toggleThemeBtn.addEventListener("click", () => {
+  const newTheme = document.body.classList.contains("dark") ? "light" : "dark";
+  setTheme(newTheme);
+});
+
+// Cargar preferencia al inicio
+const savedTheme = localStorage.getItem("theme") || "light";
+setTheme(savedTheme);
