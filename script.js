@@ -27,6 +27,15 @@ function actualizarBarraImpuestos() {
   const porcentaje = Math.min((totalUSD / 300) * 100, 100); // Máximo 100%
   barraProgreso.style.width = `${porcentaje}%`;
 
+  // Cambiar el color dinámicamente según el porcentaje
+  if (porcentaje < 50) {
+    barraProgreso.style.backgroundColor = "green"; // Verde para menos del 50%
+  } else if (porcentaje < 80) {
+    barraProgreso.style.backgroundColor = "yellow"; // Amarillo entre 50% y 80%
+  } else {
+    barraProgreso.style.backgroundColor = "red"; // Rojo para más del 80%
+  }
+
   // Calcular excedente e impuestos
   const infoExcedente = document.getElementById("info-excedente");
   if (totalUSD > 300) {
