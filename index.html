@@ -1,4 +1,3 @@
-<!-- index.html actualizado -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -21,22 +20,28 @@
       <input type="number" id="dolarBlue" placeholder="Ej: 1355" />
     </div>
     <div class="form-group">
-      <label for="dolarPorPesoChileno">1 🇨🇱 equivale a 💲USD</label>
-      <input type="number" id="dolarPorPesoChileno" step="0.0001" placeholder="Ej: 0.0010" />
+      <label for="dolarChileno">Dólar Chileno (🇨🇱)</label>
+      <input type="number" id="dolarChileno" placeholder="Ej: 970.87" />
     </div>
   </div>
 
   <div class="container">
     <button id="toggle-theme" title="Cambiar tema">🌙</button>    
-    <h1>💱 Chilean Coconuts</h1>
-
-    <div class="form-group">
-      <label for="precioCLP">Precio en 🇨🇱</label>
-      <input type="number" id="precioCLP" placeholder="Ej: 10000" />
-    </div>
+    <h1>💱 Chilean Coconuts 🥥</h1>
 
     <div class="resultado">
-      <strong>Total en 🇦🇷:</strong> <span id="resultado">0.00</span>
+      <label for="precioCLP"><strong>🇨🇱 CLP:</strong></label>
+      <input type="number" id="precioCLP" step="any" placeholder="0.00" />
+    </div>
+    
+    <div class="resultado">
+      <label for="precioUSD"><strong>💲USD:</strong></label>
+      <input type="number" id="precioUSD" step="any" placeholder="0.00" />
+    </div>
+    
+    <div class="resultado">
+      <label for="precioARS"><strong>🇦🇷 ARS:</strong></label>
+      <input type="number" id="precioARS" step="any" placeholder="0.00" />
     </div>
 
     <h2 style="margin-top: 2rem;">🛒 Lista de productos</h2>
