@@ -18,29 +18,47 @@ function formatCurrency(value) {
   return parseFloat(value.toFixed(2));
 }
 
+function parseValor(valor) {
+  const limpio = valor.replace(",", ".");
+  return parseFloat(limpio) || 0;
+}
+
 function calcularDesde(origen) {
-  const dolarBlue = parseFloat(dolarBlueInput.value) || 0;
-  const tasaCLPporUSD = parseFloat(dolarChilenoInput.value) || 0;
+  const dolarBlue = parseValor(dolarBlueInput.value);
+  const tasaCLPporUSD = parseValor(dolarChilenoInput.value);
 
   let clp, usd, ars;
 
   if (origen === "CLP") {
-    clp = parseFloat(precioCLPInput.value) || 0;
+    clp = parseValor(precioCLPInput.value);
     usd = clp / tasaCLPporUSD;
     ars = usd * dolarBlue;
+
+    if (document.activeElement !== precioUSDInput)
+      precioUSDInput.value = formatCurrency(usd);
+    if (document.activeElement !== precioARSInput)
+      precioARSInput.value = formatCurrency(ars);
+
   } else if (origen === "USD") {
-    usd = parseFloat(precioUSDInput.value) || 0;
+    usd = parseValor(precioUSDInput.value);
     clp = usd * tasaCLPporUSD;
     ars = usd * dolarBlue;
+
+    if (document.activeElement !== precioCLPInput)
+      precioCLPInput.value = formatCurrency(clp);
+    if (document.activeElement !== precioARSInput)
+      precioARSInput.value = formatCurrency(ars);
+
   } else if (origen === "ARS") {
-    ars = parseFloat(precioARSInput.value) || 0;
+    ars = parseValor(precioARSInput.value);
     usd = ars / dolarBlue;
     clp = usd * tasaCLPporUSD;
-  }
 
-  precioCLPInput.value = clp ? formatCurrency(clp) : "";
-  precioUSDInput.value = usd ? formatCurrency(usd) : "";
-  precioARSInput.value = ars ? formatCurrency(ars) : "";
+    if (document.activeElement !== precioCLPInput)
+      precioCLPInput.value = formatCurrency(clp);
+    if (document.activeElement !== precioUSDInput)
+      precioUSDInput.value = formatCurrency(usd);
+  }
 }
 
 precioCLPInput.addEventListener("input", () => calcularDesde("CLP"));
@@ -50,8 +68,8 @@ precioARSInput.addEventListener("input", () => calcularDesde("ARS"));
 function renderizarProductos() {
   listaProductos.innerHTML = "";
 
-  const tasaUSD = parseFloat(dolarChilenoInput.value) || 0;
-  const tasaARS = parseFloat(dolarBlueInput.value) || 0;
+  const tasaUSD = parseValor(dolarChilenoInput.value);
+  const tasaARS = parseValor(dolarBlueInput.value);
 
   productos.forEach((producto, index) => {
     const valorUSD = producto.clp / tasaUSD;
@@ -89,7 +107,7 @@ productoForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
   const nombre = nombreProductoInput.value.trim();
-  const clp = parseFloat(precioProductoInput.value);
+  const clp = parseValor(precioProductoInput.value);
 
   if (!nombre || isNaN(clp)) return;
 
@@ -170,3 +188,19 @@ function closeSidebar() {
 openSidebarBtn.addEventListener("click", openSidebar);
 closeSidebarBtn.addEventListener("click", closeSidebar);
 overlay.addEventListener("click", closeSidebar);
+
+
+const productosToggle = document.getElementById("productosToggle");
+
+// Guardar el estado (abierto o cerrado) cuando el usuario hace clic
+productosToggle.addEventListener("toggle", () => {
+  localStorage.setItem("productosAbierto", productosToggle.open ? "1" : "0");
+});
+
+// Al cargar la página, restaurar el estado guardado
+const estadoGuardado = localStorage.getItem("productosAbierto");
+if (estadoGuardado === "1") {
+  productosToggle.setAttribute("open", "true");
+} else {
+  productosToggle.removeAttribute("open");
+}

@@ -17,7 +17,7 @@
     <h2>Ajustes</h2>
     <div class="form-group">
       <label for="dolarBlue">Dólar Blue (🇦🇷)</label>
-      <input type="number" id="dolarBlue" placeholder="Ej: 1355" />
+      <input type="number" id="dolarBlue" placeholder="Ej: 1230" />
     </div>
     <div class="form-group">
       <label for="dolarChileno">Dólar Chileno (🇨🇱)</label>
@@ -31,21 +31,42 @@
 
     <div class="resultado">
       <label for="precioCLP"><strong>🇨🇱 CLP:</strong></label>
-      <input type="number" id="precioCLP" step="any" placeholder="0.00" />
+      <input type="number" id="precioCLP" step=".01" placeholder="0.00" />
     </div>
     
     <div class="resultado">
       <label for="precioUSD"><strong>💲USD:</strong></label>
-      <input type="number" id="precioUSD" step="any" placeholder="0.00" />
+      <input type="number" id="precioUSD" step=".01" placeholder="0.00" />
     </div>
     
     <div class="resultado">
       <label for="precioARS"><strong>🇦🇷 ARS:</strong></label>
-      <input type="number" id="precioARS" step="any" placeholder="0.00" />
+      <input type="number" id="precioARS" step=".01" placeholder="0.00" />
     </div>
 
-    <h2 style="margin-top: 2rem;">🛒 Lista de productos</h2>
-    <ul id="listaProductos" class="lista-productos"></ul>
+
+    <h2><details id="productosToggle">
+      <summary>🛒 Lista de productos</summary>
+      <ul id="listaProductos" class="lista-productos"></ul>
+  
+      <form id="productoForm">
+        <div class="form-group">
+          <label for="nombreProducto">Nombre del Producto</label>
+          <input type="text" id="nombreProducto" placeholder="Ej: Audífonos" />
+        </div>
+        <div class="form-group">
+          <label for="precioProducto">Precio del Producto (🇨🇱)</label>
+          <input type="number" id="precioProducto" placeholder="Ej: 10000" />
+        </div>
+        <button type="submit">Agregar Producto</button>
+      </form>
+    </details></h2>
+  
+
+    <!-- <details id="productosToggle" style="margin-top: 2rem;">
+      <summary style="cursor: pointer; font-size: 1.2rem;">🛒 Lista de productos</summary>
+      <ul id="listaProductos" class="lista-productos"></ul>
+    </details>    
 
     <form id="productoForm">
       <div class="form-group">
@@ -58,7 +79,7 @@
       </div>
       <button type="submit">Agregar Producto</button>
     </form>
-  </div>
+  </div> -->
 
   <script src="script.js"></script>
   <script>

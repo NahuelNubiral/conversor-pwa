@@ -152,3 +152,27 @@ h2 {
   border-bottom: 1px solid #ccc;
   padding-bottom: 0.4rem;
 }
+
+details summary {
+  font-weight: bold;
+  padding: 0.5rem;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  user-select: none;
+}
+
+details[open] summary {
+  background-color: #e0e0e0;
+}
+
+
+/* Ajustar el tamaño de los textos de los labels en el formulario */
+form .form-group label {
+  font-size: 1rem;  /* Tamaño de fuente más pequeño */
+}
+
+/* Si quieres reducir también el tamaño de los inputs */
+form .form-group input {
+  font-size: 1rem;  /* Igualar el tamaño del texto de los inputs */
+}
